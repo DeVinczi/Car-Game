@@ -8,8 +8,9 @@
 #include <vector>
 #include <algorithm>
 
+//// FOR THE BEST FEELINGS CHANGE YOUR COMMAND WINDOW PROPERITIES TO 100 X 34 px
 #define SCREEN_WIDTH 90
-#define SCREEN_HEIGHT 30
+#define SCREEN_HEIGHT 33
 #define WIN_WIDTH 70
 
 using namespace std;
@@ -48,9 +49,9 @@ void drawBorder()
 {
 	for (int i = 0; i < SCREEN_HEIGHT; i++)
 	{
-		for (int j = 0; j < 17; j++) {
+		for (int j = 0; j < 18; j++) {
 			gotoxy(0 + j, i); cout << "+";
-			gotoxy(WIN_WIDTH - j, i); cout << "+";
+			gotoxy(WIN_WIDTH - j+1, i); cout << "+";
 		}
 	}
 	for (int i = 0; i < SCREEN_HEIGHT; i++) {
@@ -134,7 +135,7 @@ void instructions()
 	cout << "\n------------";
 	cout << "\nAvoid Cars by moving left or right";
 	cout << "\n\nPress 'a' to move left";
-	cout << "Press 'd' to move right";
+	cout << "\nPress 'd' to move right";
 	cout << "\nPress 'escape' to exit";
 	cout << "\n\nPress any key to go back to menu";
 	_getch();
