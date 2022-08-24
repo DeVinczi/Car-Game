@@ -3,6 +3,8 @@
 #include <dos.h>
 #include <Windows.h>
 #include <time.h>
+#include <fstream>
+#include <string>
 
 #define SCREEN_WIDTH 90
 #define SCREEN_HEIGHT 30
@@ -135,7 +137,15 @@ void instructions()
 	cout << "\n\nPress any key to go back to menu";
 	_getch();
 }
-
+void ScoreTable()
+{
+	fstream high_score("high_score.txt",ios::in|ios::ate|ios::out);
+	if (high_score.is_open())
+	{
+		high_score << score << '\n';
+	}
+	high_score.close();
+}
 void play()
 {
 	carPos = -1 + WIN_WIDTH / 2;
@@ -145,7 +155,6 @@ void play()
 	enemyY[0] = enemyY[1] = 1;
 	system("cls");
 	drawBorder();
-	updateScore();
 	genEnemy(0);
 	genEnemy(1);
 
@@ -184,6 +193,7 @@ void play()
 		drawEnemy(1);
 		if (collision() == 1) {
 			gameover();
+			ScoreTable();
 			return;
 		}
 		Sleep(50);
@@ -210,6 +220,7 @@ void play()
 		}
 	}
 }
+
 int main()
 {
 	setcursor(0, 0);
@@ -222,11 +233,13 @@ int main()
 		gotoxy(10, 9); cout << "1. Start Game";
 		gotoxy(10, 10); cout << "2. Instructions";
 		gotoxy(10, 11); cout << "3. Quit";
-		gotoxy(10, 13); cout << "Select option: ";
+		gotoxy(10, 12); cout << "4. Tablica wynikow";
+		gotoxy(10, 15); cout << "Select option: ";
 		char op = _getche();
 		if (op == '1') play();
 		else if (op == '2') instructions();
 		else if (op == '3') exit(0);
+		else if (op == '4') ScoreTable();
 	} while (1);
 		return 0;
 }
