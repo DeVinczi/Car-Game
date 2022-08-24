@@ -5,6 +5,8 @@
 #include <time.h>
 #include <fstream>
 #include <string>
+#include <vector>
+#include <algorithm>
 
 #define SCREEN_WIDTH 90
 #define SCREEN_HEIGHT 30
@@ -52,7 +54,7 @@ void drawBorder()
 		}
 	}
 	for (int i = 0; i < SCREEN_HEIGHT; i++) {
-		gotoxy(SCREEN_WIDTH, i); cout << "=";
+		gotoxy(SCREEN_WIDTH, i); cout << "+";
 	}
 }
 void genEnemy(int ind)
@@ -137,7 +139,7 @@ void instructions()
 	cout << "\n\nPress any key to go back to menu";
 	_getch();
 }
-void ScoreTable()
+void ScoreBoard()
 {
 	fstream high_score("high_score.txt",ios::in|ios::ate|ios::out);
 	if (high_score.is_open())
@@ -146,6 +148,46 @@ void ScoreTable()
 	}
 	high_score.close();
 }
+bool myCmp(string s1, string s2)
+{
+
+	// If size of numeric strings
+	// are same the put lowest value
+	// first
+	if (s1.size() == s2.size()) {
+		return s1 < s2;
+	}
+
+	// If size is not same put the
+	// numeric string with less
+	// number of digits first
+	else {
+		return s1.size() < s2.size();
+	}
+}
+void sortingboard()
+{
+	string line;
+	vector<string> score;
+	score.clear();
+	fstream high_score("high_score.txt", ios::in | ios::out);
+	while (getline(high_score, line))
+	{
+		score.push_back(line);
+	}
+	sort(score.begin(), score.end(),myCmp);
+
+	cout << score[score.size() - 1];
+}
+void showboard()
+{
+	system("cls");
+	gotoxy(15, 15); cout << "Highest scored number is: ";
+	sortingboard();
+	gotoxy(13, 17); cout << "Press any key to go back to menu";
+	_getch();
+}
+
 void play()
 {
 	carPos = -1 + WIN_WIDTH / 2;
@@ -193,7 +235,7 @@ void play()
 		drawEnemy(1);
 		if (collision() == 1) {
 			gameover();
-			ScoreTable();
+			ScoreBoard();
 			return;
 		}
 		Sleep(50);
@@ -232,14 +274,14 @@ int main()
 		gotoxy(10, 7); cout << " --------------------------- ";
 		gotoxy(10, 9); cout << "1. Start Game";
 		gotoxy(10, 10); cout << "2. Instructions";
-		gotoxy(10, 11); cout << "3. Quit";
-		gotoxy(10, 12); cout << "4. Tablica wynikow";
+		gotoxy(10, 11); cout << "3. Highest score";
+		gotoxy(10, 12); cout << "4. Quit ";
 		gotoxy(10, 15); cout << "Select option: ";
 		char op = _getche();
 		if (op == '1') play();
 		else if (op == '2') instructions();
-		else if (op == '3') exit(0);
-		else if (op == '4') ScoreTable();
+		else if (op == '3') showboard();
+		else if (op == '4') exit(0);
 	} while (1);
 		return 0;
 }
